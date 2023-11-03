@@ -14,6 +14,14 @@ export type Payment = {
   amount?: number;
 };
 
+const calculateDiscountedAmount = (total: number, percentage: number): number => {
+  if (percentage < 0 || percentage > 100) {
+    throw new Error('Percentage should be between 0 and 100.');
+  }
+
+  return Math.floor(total * (percentage / 100));
+};
+
 const isCouponUsed = (payments: Payment[]): boolean => {
   return payments.every((payment) => payment.type === 'COUPON');
 };
@@ -27,7 +35,7 @@ export function charge(invoice: Invoice, payments: Payment[]) {
     .map((payment) => {
       if (payment.type === 'COUPON') {
         if (payment.percentage != null) {
-          deposit += Math.floor(total * (payment.percentage / 100));
+          deposit += calculateDiscountedAmount(total, payment.percentage);
         } else {
           deposit += payment.amount || 0;
         }
