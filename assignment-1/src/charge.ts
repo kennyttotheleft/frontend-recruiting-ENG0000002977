@@ -34,6 +34,14 @@ const calculateCashPaymentAmount = (payment: Payment): number => {
   return payment.amount || 0;
 };
 
+const isOverCharge = ({ total, deposit }: { total: number; deposit: number }): boolean => {
+  return deposit >= total;
+};
+
+const isShortage = ({ total, deposit }: { total: number; deposit: number }): boolean => {
+  return total > deposit;
+};
+
 const isCouponUsed = (payments: Payment[]): boolean => {
   return payments.every((payment) => payment.type === 'COUPON');
 };
@@ -48,13 +56,13 @@ export function charge(invoice: Invoice, payments: Payment[]) {
       if (payment.type === 'COUPON') {
         deposit += calculateCouponPaymentAmount(total, payment);
       } else {
-        if (deposit >= total) {
+        if (isOverCharge({ total, deposit })) {
           throw new Error('OverCharge');
         }
         deposit += calculateCashPaymentAmount(payment);
       }
     });
-  if (total > deposit) {
+  if (isShortage({ total, deposit })) {
     throw new Error('Shortage');
   }
 
