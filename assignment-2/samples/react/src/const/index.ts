@@ -4,7 +4,12 @@ export type Prefecture = {
 }
 
 export class Const {
-  static PREF_OPTIONS = [
+  static API_URL: string = process.env.REACT_APP_API_URL || ''
+  static API_TIMEOUT_MILLIS: number = parseInt(
+    process.env.REACT_APP_API_TIMEOUT_MILLIS || '0',
+    10
+  )
+  static PREF_OPTIONS: Prefecture[] = [
     { value: '北海道', label: '北海道' },
     { value: '青森県', label: '青森県' },
     { value: '岩手県', label: '岩手県' },

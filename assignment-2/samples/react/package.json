@@ -25,9 +25,9 @@
     "zod": "^3.22.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "dotenv -e .env react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "dotenv -e .env react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -47,5 +47,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.3.0"
   }
 }

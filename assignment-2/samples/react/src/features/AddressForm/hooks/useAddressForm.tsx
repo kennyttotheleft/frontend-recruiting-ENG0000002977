@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { addressFormSchema, AddressFormSchemaType } from '../schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-
-// TODO 環境変数から取得する
-const API_URL = 'https://httpstat.us/201'
-const API_TIMEOUT_MILLIS = 5000
+import { Const } from '../../../const'
 
 export const useAddressForm = () => {
+  const API_URL: string = Const.API_URL
+  const API_TIMEOUT_MILLIS: number = Const.API_TIMEOUT_MILLIS
   const [isRequestFinished, setIsRequestFinished] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
 
