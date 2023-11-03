@@ -22,6 +22,18 @@ const calculateDiscountedAmount = (total: number, percentage: number): number =>
   return Math.floor(total * (percentage / 100));
 };
 
+const calculateCouponPaymentAmount = (total: number, payment: Payment): number => {
+  if (payment.percentage != null) {
+    return calculateDiscountedAmount(total, payment.percentage);
+  } else {
+    return payment.amount || 0;
+  }
+};
+
+const calculateCashPaymentAmount = (payment: Payment): number => {
+  return payment.amount || 0;
+};
+
 const isCouponUsed = (payments: Payment[]): boolean => {
   return payments.every((payment) => payment.type === 'COUPON');
 };
@@ -34,16 +46,12 @@ export function charge(invoice: Invoice, payments: Payment[]) {
     .sort((payment) => (payment.type !== 'CASH' ? -1 : 1))
     .map((payment) => {
       if (payment.type === 'COUPON') {
-        if (payment.percentage != null) {
-          deposit += calculateDiscountedAmount(total, payment.percentage);
-        } else {
-          deposit += payment.amount || 0;
-        }
+        deposit += calculateCouponPaymentAmount(total, payment);
       } else {
         if (deposit >= total) {
           throw new Error('OverCharge');
         }
-        deposit += payment.amount || 0;
+        deposit += calculateCashPaymentAmount(payment);
       }
     });
   if (total > deposit) {
