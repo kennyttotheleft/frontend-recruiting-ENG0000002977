@@ -9,9 +9,13 @@ export type Receipt = {
 };
 
 export type Payment = {
-  type: string;
+  type: 'CASH' | 'COUPON';
   percentage?: number;
   amount?: number;
+};
+
+const isCouponUsed = (payments: Payment[]): boolean => {
+  return payments.every((payment) => payment.type === 'COUPON');
 };
 
 export function charge(invoice: Invoice, payments: Payment[]) {
@@ -38,13 +42,6 @@ export function charge(invoice: Invoice, payments: Payment[]) {
     throw new Error('Shortage');
   }
 
-  let isCoupon = true;
-  for (let i = 0; i < payments.length; i++) {
-    if (payments[i].type !== 'COUPON') {
-      isCoupon = false;
-      continue;
-    }
-  }
-  if (isCoupon) return { total, deposit, change: 0 };
-  return { total: total, deposit: deposit, change: deposit - total };
+  const change = isCouponUsed(payments) ? 0 : deposit - total;
+  return { total, deposit, change };
 }
