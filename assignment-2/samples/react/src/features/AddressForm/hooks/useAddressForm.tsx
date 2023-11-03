@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 // TODO 環境変数から取得する
 const API_URL = 'https://httpstat.us/201'
+const API_TIMEOUT_MILLIS = 5000
 
 export const useAddressForm = () => {
   const [isRequestFinished, setIsRequestFinished] = useState<boolean>(false)
@@ -32,13 +33,16 @@ export const useAddressForm = () => {
   }, [isSubmitSuccessful, isSubmitting, isSubmitted, setIsRequestFinished])
 
   const sendRequest = (data: AddressFormSchemaType): Promise<boolean> => {
+    const controller = new AbortController()
     const requestOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
+      signal: controller.signal,
     }
+    setTimeout(() => controller.abort(), API_TIMEOUT_MILLIS)
 
     return fetch(API_URL, requestOptions)
       .then((response) => {
