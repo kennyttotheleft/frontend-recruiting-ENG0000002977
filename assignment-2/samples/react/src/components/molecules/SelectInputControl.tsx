@@ -38,7 +38,7 @@ export const SelectInputControl = ({
   ...rest
 }: SelectInputControlProps) => {
   return (
-    <FormControl mb={4} isInvalid={!!error}>
+    <FormControl mb={2} isInvalid={!!error}>
       <Box w='100%' display='flex' alignItems='center'>
         <Box w='30%' display='flex' alignItems='center' textAlign='end'>
           <FormLabel

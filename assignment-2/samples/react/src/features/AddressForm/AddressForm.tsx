@@ -79,7 +79,7 @@ const AddressForm = () => {
         loadingText={'送信中'}
         isDisabled={!isValid || isSubmitting}
         isLoading={isSubmitting}
-        mt={8}
+        mt={4}
       >
         登録
       </SubmitButton>
